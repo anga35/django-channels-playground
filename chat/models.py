@@ -7,11 +7,19 @@ User=get_user_model()
 class ChatRoom(models.Model):
     users=models.ManyToManyField(User)
     room_name=models.CharField(max_length=100)
+
+
+    def __str__(self) -> str:
+        return self.room_name
     
 
 class Message(models.Model):
     from_user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
-    read_by=models.TextField(default='')
+    read_by=models.TextField(default='',blank=True,null=True)
     text_content=models.TextField()
     date_created=models.DateTimeField(auto_now=True)
     chat_room=models.ForeignKey(ChatRoom,related_name='messages',on_delete=models.SET_NULL,null=True,blank=True)
+
+
+    def __str__(self) -> str:
+        return self.text_content
