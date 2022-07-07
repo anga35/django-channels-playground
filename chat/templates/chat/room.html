@@ -12,8 +12,28 @@
     {{ room_name|json_script:"room-name" }}
     {{ user_name|json_script:"user-name" }}
     <script>
+        console.log("HIIII")
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         const userName=JSON.parse(document.getElementById('user-name').textContent);
+        const xhttp= new XMLHttpRequest();
+        const token='1dc052ef415429cf35c8c1636da7cea5b46d0250'//jide
+        xhttp.open('GET','http://127.0.0.1:8000/api/get_unread/')
+        xhttp.setRequestHeader('Authorization','Token '+token)
+
+
+        xhttp.onload=function(){
+            console.log(xhttp.responseText)
+            let data=JSON.parse(xhttp.responseText)
+            let messages=data.messages
+            for(const message of messages){
+                document.querySelector('#chat-log').value+=(message.from_user+':'+message.text_content+'\n')
+            }
+        }
+        
+        xhttp.send()
+
+
+
 
 
         const chatSocket = new WebSocket(

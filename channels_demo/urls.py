@@ -20,5 +20,5 @@ from api import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('chat/',include('chat.urls')),
-    path('test/',views.GetUnreadMessages.as_view())
+    path('api/',include('api.urls'))
 ]
