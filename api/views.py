@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 
@@ -29,6 +29,18 @@ class GetUnreadMessages(APIView):
 
         return Response(status=200)
 
-
+class MessagesRead(APIView):
+    def post(self,request):
+        data=request.data
+        username=data['username']
+        message_pks=data['pk']
+        if(type(message_pks)==list):
+            for pk in message_pks:
+                if(type(pk)==int):
+                    message=get_object_or_404(Message,pk=pk)
+                    message.read_by=f'{message.read_by}{username},'
+                    message.save()
+        else:
+            raise serializers.ValidationError('')
 
 

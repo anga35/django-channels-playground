@@ -23,10 +23,29 @@
             + roomName
             + '/'
         );
+        chatSocket.onopen=function(e){
+            chatSocket.send(JSON.stringify({
+            'persist_username':userName
+        }))
+        }
+
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
+            if(data.hasOwnProperty('status_code')){
+                
+console.log(data.status_code)
+            }else{
             document.querySelector('#chat-log').value += (data.from_user+':'+data.message + '\n');
+            pk=data.pk
+
+
+            chatSocket.send(JSON.stringify({
+                'read_pk':pk,
+                'user_name':userName
+            }))
+        }
+
         };
 
         chatSocket.onclose = function(e) {
@@ -50,6 +69,11 @@
             }));
             messageInputDom.value = '';
         };
+
+
+
+
+
     </script>
 </body>
 </html>
